@@ -22,7 +22,9 @@ Skill Tracker is a modern CRUD application that allows users to manage their tec
 https://github.com/user-attachments/assets/2c87f68e-7863-4fd3-afc5-af3cc4331ea1
 
 
-https://github.com/user-attachments/assets/a5f99278-375b-4055-81a0-71346239e0c7
+
+
+https://github.com/user-attachments/assets/f3847e66-b448-41e3-a6de-2e2cfc85324b
 
 
 
@@ -309,7 +311,10 @@ Skill Trackerは、技術スキルを管理し、経験レベルを追跡し、�
 https://github.com/user-attachments/assets/2c87f68e-7863-4fd3-afc5-af3cc4331ea1
 
 
-https://github.com/user-attachments/assets/a5f99278-375b-4055-81a0-71346239e0c7
+
+
+https://github.com/user-attachments/assets/f3847e66-b448-41e3-a6de-2e2cfc85324b
+
 
 ## ✨ 機能
 
