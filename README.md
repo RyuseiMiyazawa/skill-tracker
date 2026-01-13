@@ -16,9 +16,6 @@ Skill Tracker is a modern CRUD application that allows users to manage their tec
 
 ## 📸 Screenshots
 
-### Authentication
-[Screenshot coming soon]
-
 ### Main Dashboard
 [Screenshot coming soon]
 
@@ -300,9 +297,6 @@ Next.js、TypeScript、Supabaseで構築されたフルスタックスキル管�
 Skill Trackerは、技術スキルを管理し、経験レベルを追跡し、インタラクティブなチャートで専門性を可視化できるモダンなCRUDアプリケーションです。このプロジェクトは、最新のWeb開発手法とフルスタックアーキテクチャを実証します。
 
 ## 📸 スクリーンショット
-
-### 認証
-[スクリーンショット準備中]
 
 ### メインダッシュボード
 [スクリーンショット準備中]
