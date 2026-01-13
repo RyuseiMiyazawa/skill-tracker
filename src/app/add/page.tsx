@@ -29,9 +29,9 @@ export default function AddSkillPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ height: 'calc(100vh - 12rem)' }}>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 fixed inset-0 top-20" style={{ height: 'calc(100vh - 80px)', padding: '2rem' }}>
       {/* Left: Form */}
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto pl-10">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Add New Skill</h1>
         <SkillForm mode="create" externalFormData={formData} onFormDataChange={setFormData} />
       </div>

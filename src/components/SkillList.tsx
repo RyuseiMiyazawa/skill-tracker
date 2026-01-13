@@ -8,9 +8,10 @@ import { motion } from "framer-motion";
 
 type Props = {
   skills: Skill[];
+  onSkillDeleted?: () => void;
 };
 
-export default function SkillList({ skills }: Props) {
+export default function SkillList({ skills, onSkillDeleted }: Props) {
   const router = useRouter();
   const [deleting, setDeleting] = useState<string | null>(null);
 
@@ -26,6 +27,9 @@ export default function SkillList({ skills }: Props) {
 
       if (res.ok) {
         // 削除成功後、データを再読み込み
+        if (onSkillDeleted) {
+          onSkillDeleted();
+        }
         router.refresh();
       } else {
         const errorData = await res.json();

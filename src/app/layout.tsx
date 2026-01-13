@@ -18,7 +18,7 @@ export default function RootLayout({
       <body className="bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 min-h-screen">
         <AuthProvider>
           <Header />
-          <main className="container mx-auto px-4 py-8 max-w-7xl">{children}</main>
+          <main className="container mx-auto px-4 py-8 max-w-7xl mt-20">{children}</main>
         </AuthProvider>
       </body>
     </html>

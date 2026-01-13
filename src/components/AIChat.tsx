@@ -28,10 +28,14 @@ export default function AIChat({ onSkillExtracted }: Props) {
   const [loading, setLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [voiceTranscript, setVoiceTranscript] = useState("");
+  const [lastEnterTime, setLastEnterTime] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Only scroll within the chat container, not the whole page
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
   }, [messages]);
 
   const handleSend = async () => {
@@ -80,8 +84,18 @@ export default function AIChat({ onSkillExtracted }: Props) {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+      const currentTime = Date.now();
+      const timeSinceLastEnter = currentTime - lastEnterTime;
+
+      // If Enter was pressed within 500ms (double Enter)
+      if (timeSinceLastEnter < 500 && lastEnterTime !== 0) {
+        e.preventDefault();
+        handleSend();
+        setLastEnterTime(0);
+      } else {
+        // First Enter - add newline
+        setLastEnterTime(currentTime);
+      }
     }
   };
 
@@ -164,16 +178,17 @@ export default function AIChat({ onSkillExtracted }: Props) {
 
       {/* Input */}
       <div className="p-4 border-t border-purple-200 bg-white rounded-b-lg flex-shrink-0">
-        <div className="flex gap-2 items-end">
+        <div className="flex gap-2 items-start">
           <div className="flex-1 relative">
-            <input
-              type="text"
+            <textarea
               value={isRecording ? voiceTranscript : input}
               onChange={(e) => !isRecording && setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type a message..."
+              placeholder="Type a message... (Press Enter twice to send)"
               disabled={loading || isRecording}
-              className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
+              rows={1}
+              className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 resize-none"
+              style={{ minHeight: '48px', maxHeight: '120px' }}
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2">
               {!isRecording && (
@@ -215,10 +230,12 @@ export default function AIChat({ onSkillExtracted }: Props) {
             <button
               onClick={handleSend}
               disabled={loading || !input.trim()}
-              className="px-5 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg flex items-center gap-2"
+              className="px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg flex items-center justify-center"
+              style={{ minHeight: '48px' }}
+              title="Send"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
               </svg>
             </button>
           )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Skill } from "@/types/skill";
 import VoiceInput from "./VoiceInput";
@@ -55,6 +55,24 @@ export default function SkillForm({ skill, mode, externalFormData, onFormDataCha
 }
 
 function SkillFormContent({ formData, setFormData, mode, skill, router, loading, setLoading }: SkillFormProps & { mode: "create" | "edit"; skill?: Skill; router: any; loading: boolean; setLoading: (loading: boolean) => void }) {
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { authenticatedFetch } = await import("@/lib/api");
+        const res = await authenticatedFetch("/api/skills/categories");
+        if (res.ok) {
+          const data = await res.json();
+          setCategories(data);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleVoiceTranscript = async (transcript: string) => {
     try {
@@ -137,12 +155,18 @@ function SkillFormContent({ formData, setFormData, mode, skill, router, loading,
         <input
           type="text"
           id="category"
+          list="categories"
           value={formData.category}
           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           required
           placeholder="e.g. Frontend, Backend, Infrastructure"
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <datalist id="categories">
+          {categories.map((category) => (
+            <option key={category} value={category} />
+          ))}
+        </datalist>
       </div>
 
       <div>

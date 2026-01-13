@@ -10,23 +10,23 @@ export default function HomePage() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const res = await authenticatedFetch("/api/skills");
-        if (res.ok) {
-          const data = await res.json();
-          setSkills(data);
-        } else {
-          console.error("Failed to fetch skills");
-        }
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-      } finally {
-        setLoading(false);
+  const fetchSkills = async () => {
+    try {
+      const res = await authenticatedFetch("/api/skills");
+      if (res.ok) {
+        const data = await res.json();
+        setSkills(data);
+      } else {
+        console.error("Failed to fetch skills");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchSkills();
   }, []);
 
@@ -57,7 +57,7 @@ export default function HomePage() {
       ) : (
         <>
           <SkillCharts skills={skills} />
-          <SkillList skills={skills} />
+          <SkillList skills={skills} onSkillDeleted={fetchSkills} />
         </>
       )}
     </div>
