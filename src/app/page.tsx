@@ -1,11 +1,42 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import SkillList from "@/components/SkillList";
 import SkillCharts from "@/components/SkillCharts";
-import { getSkills } from "@/lib/data";
+import { Skill } from "@/types/skill";
+import { authenticatedFetch } from "@/lib/api";
 
-export const dynamic = "force-dynamic";
+export default function HomePage() {
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function HomePage() {
-  const skills = await getSkills();
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const res = await authenticatedFetch("/api/skills");
+        if (res.ok) {
+          const data = await res.json();
+          setSkills(data);
+        } else {
+          console.error("Failed to fetch skills");
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSkills();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 text-lg">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div>

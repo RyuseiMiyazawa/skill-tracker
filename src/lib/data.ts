@@ -1,10 +1,18 @@
 import { Skill } from "@/types/skill";
 import { supabase } from "./supabase";
+import { getCurrentUser } from "./auth";
 
 export const getSkills = async (): Promise<Skill[]> => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("skills")
     .select("*")
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   if (error) throw error;
@@ -23,11 +31,14 @@ export const getSkillById = async (id: string): Promise<Skill | null> => {
 };
 
 export const createSkill = async (
-  skillData: Omit<Skill, "id" | "created_at" | "updated_at">
+  skillData: Omit<Skill, "id" | "created_at" | "updated_at" | "user_id">
 ): Promise<Skill> => {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("User not authenticated");
+
   const { data, error } = await supabase
     .from("skills")
-    .insert([skillData])
+    .insert([{ ...skillData, user_id: user.id }])
     .select()
     .single();
 

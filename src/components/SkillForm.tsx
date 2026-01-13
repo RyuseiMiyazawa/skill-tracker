@@ -88,10 +88,11 @@ function SkillFormContent({ formData, setFormData, mode, skill, router, loading,
     setLoading(true);
 
     try {
+      const { authenticatedFetch } = await import("@/lib/api");
       const url = mode === "create" ? "/api/skills" : `/api/skills/${skill?.id}`;
       const method = mode === "create" ? "POST" : "PATCH";
 
-      const res = await fetch(url, {
+      const res = await authenticatedFetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

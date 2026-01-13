@@ -21,7 +21,7 @@ export default function AIChat({ onSkillExtracted }: Props) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "こんにちは！スキルの追加をお手伝いします。どのようなスキルを追加したいですか？",
+      content: "Hello! I'll help you add your skills. What skill would you like to add?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -70,7 +70,7 @@ export default function AIChat({ onSkillExtracted }: Props) {
         ...prev,
         {
           role: "assistant",
-          content: "エラーが発生しました。もう一度お試しください。",
+          content: "An error occurred. Please try again.",
         },
       ]);
     } finally {
@@ -115,10 +115,10 @@ export default function AIChat({ onSkillExtracted }: Props) {
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
-          AI アシスタント
+          AI Assistant
         </h2>
         <p className="text-sm text-purple-100 mt-1">
-          対話形式でスキルを追加できます
+          Add skills through conversation
         </p>
       </div>
 
@@ -171,7 +171,7 @@ export default function AIChat({ onSkillExtracted }: Props) {
               value={isRecording ? voiceTranscript : input}
               onChange={(e) => !isRecording && setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="メッセージを入力..."
+              placeholder="Type a message..."
               disabled={loading || isRecording}
               className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
             />
@@ -192,7 +192,7 @@ export default function AIChat({ onSkillExtracted }: Props) {
               <button
                 onClick={handleVoiceCancel}
                 className="p-3 text-red-600 hover:bg-red-50 rounded-lg transition"
-                title="キャンセル"
+                title="Cancel"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -204,7 +204,7 @@ export default function AIChat({ onSkillExtracted }: Props) {
                 onClick={handleVoiceConfirm}
                 disabled={!voiceTranscript}
                 className="p-3 text-green-600 hover:bg-green-50 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-                title="確定"
+                title="Confirm"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
