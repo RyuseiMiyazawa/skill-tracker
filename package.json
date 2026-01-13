@@ -1,0 +1,39 @@
+{
+  "name": "skill-tracker",
+  "version": "1.0.0",
+  "description": "Skill management application with Next.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.90.1",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^25.0.7",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.23",
+    "chart.js": "^4.5.1",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.1",
+    "framer-motion": "^12.26.1",
+    "next": "^16.1.1",
+    "postcss": "^8.5.6",
+    "react": "^19.2.3",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.3",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "zod": "^3.25.76"
+  },
+  "keywords": [
+    "next.js",
+    "react",
+    "typescript",
+    "skill-tracker"
+  ],
+  "author": "",
+  "license": "ISC"
+}
