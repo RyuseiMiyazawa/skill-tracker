@@ -1,5 +1,7 @@
 # Skill Tracker
 
+**🚀 Live Demo: [https://skill-tracker-mu.vercel.app](https://skill-tracker-mu.vercel.app)**
+
 [English](#english) | [日本語](#japanese)
 
 ---
@@ -216,6 +218,8 @@ ISC
 <a name="japanese"></a>
 
 # Skill Tracker
+
+**🚀 ライブデモ: [https://skill-tracker-mu.vercel.app](https://skill-tracker-mu.vercel.app)**
 
 [English](#english) | [日本語](#japanese)
 
