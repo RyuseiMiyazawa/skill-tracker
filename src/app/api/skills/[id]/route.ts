@@ -21,7 +21,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
   try {
     const { id } = await params;
     const body = await request.json();
-    const validatedData = updateSkillSchema.parse(body);
+    const validatedData = updateSkillSchema.parse(body) as Partial<{
+      name: string;
+      level: 1 | 2 | 3 | 4 | 5;
+      category: string;
+      experience_months: number;
+    }>;
     const updatedSkill = await updateSkill(id, validatedData);
 
     if (!updatedSkill) {

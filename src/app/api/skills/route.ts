@@ -12,7 +12,12 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const validatedData = createSkillSchema.parse(body);
+    const validatedData = createSkillSchema.parse(body) as {
+      name: string;
+      level: 1 | 2 | 3 | 4 | 5;
+      category: string;
+      experience_months: number;
+    };
     const newSkill = await createSkill(validatedData);
     return NextResponse.json(newSkill, { status: 201 });
   } catch (error) {
