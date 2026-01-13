@@ -17,10 +17,15 @@ Skill Tracker is a modern CRUD application that allows users to manage their tec
 ## 📸 Screenshots
 
 ### Main Dashboard
-[Screenshot coming soon]
 
-### Voice Input
-[Screenshot coming soon]
+
+https://github.com/user-attachments/assets/2c87f68e-7863-4fd3-afc5-af3cc4331ea1
+
+
+https://github.com/user-attachments/assets/a5f99278-375b-4055-81a0-71346239e0c7
+
+
+
 
 ## ✨ Features
 
@@ -299,10 +304,12 @@ Skill Trackerは、技術スキルを管理し、経験レベルを追跡し、�
 ## 📸 スクリーンショット
 
 ### メインダッシュボード
-[スクリーンショット準備中]
 
-### 音声入力
-[スクリーンショット準備中]
+
+https://github.com/user-attachments/assets/2c87f68e-7863-4fd3-afc5-af3cc4331ea1
+
+
+https://github.com/user-attachments/assets/a5f99278-375b-4055-81a0-71346239e0c7
 
 ## ✨ 機能
 
