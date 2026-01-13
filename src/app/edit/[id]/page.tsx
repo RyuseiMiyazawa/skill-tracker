@@ -1,6 +1,6 @@
 import { getSkillById } from "@/lib/data";
-import SkillForm from "@/components/SkillForm";
 import { notFound } from "next/navigation";
+import EditSkillClient from "./EditSkillClient";
 
 type Params = Promise<{ id: string }>;
 
@@ -12,10 +12,5 @@ export default async function EditSkillPage({ params }: { params: Params }) {
     notFound();
   }
 
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Edit Skill</h1>
-      <SkillForm skill={skill} mode="edit" />
-    </div>
-  );
+  return <EditSkillClient skill={skill} />;
 }
