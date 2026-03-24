@@ -4,6 +4,12 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Skill } from "@/types/skill";
 import VoiceInput from "./VoiceInput";
+import { useAuth } from "./AuthProvider";
+import {
+  createGuestSkill,
+  getGuestCategories,
+  updateGuestSkill,
+} from "@/lib/guestSkills";
 
 type Props = {
   skill?: Skill;
@@ -55,11 +61,19 @@ export default function SkillForm({ skill, mode, externalFormData, onFormDataCha
 }
 
 function SkillFormContent({ formData, setFormData, mode, skill, router, loading, setLoading }: SkillFormProps & { mode: "create" | "edit"; skill?: Skill; router: any; loading: boolean; setLoading: (loading: boolean) => void }) {
+  const { isGuest, loading: authLoading } = useAuth();
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
+    if (authLoading) return;
+
     const fetchCategories = async () => {
       try {
+        if (isGuest) {
+          setCategories(getGuestCategories());
+          return;
+        }
+
         const { authenticatedFetch } = await import("@/lib/api");
         const res = await authenticatedFetch("/api/skills/categories");
         if (res.ok) {
@@ -72,7 +86,7 @@ function SkillFormContent({ formData, setFormData, mode, skill, router, loading,
     };
 
     fetchCategories();
-  }, []);
+  }, [authLoading, isGuest]);
 
   const handleVoiceTranscript = async (transcript: string) => {
     try {
@@ -106,6 +120,18 @@ function SkillFormContent({ formData, setFormData, mode, skill, router, loading,
     setLoading(true);
 
     try {
+      if (isGuest) {
+        if (mode === "create") {
+          createGuestSkill(formData);
+        } else if (skill?.id) {
+          updateGuestSkill(skill.id, formData);
+        }
+
+        router.push("/");
+        router.refresh();
+        return;
+      }
+
       const { authenticatedFetch } = await import("@/lib/api");
       const url = mode === "create" ? "/api/skills" : `/api/skills/${skill?.id}`;
       const method = mode === "create" ? "POST" : "PATCH";

@@ -1,24 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSkillById, updateSkill, deleteSkill } from "@/lib/data";
 import { updateSkillSchema } from "@/lib/validation";
+import { supabase } from "@/lib/supabase";
 
 type Params = Promise<{ id: string }>;
 
-// GET /api/skills/:id - 単一取得
-export async function GET(request: NextRequest, { params }: { params: Params }) {
-  const { id } = await params;
-  const skill = await getSkillById(id);
+async function getUserFromRequest(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader) return null;
 
-  if (!skill) {
+  const token = authHeader.replace("Bearer ", "");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser(token);
+
+  return user;
+}
+
+export async function GET(request: NextRequest, { params }: { params: Params }) {
+  const user = await getUserFromRequest(request);
+  if (!user) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const { data, error } = await supabase
+    .from("skills")
+    .select("*")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (error || !data) {
     return NextResponse.json({ error: "Skill not found" }, { status: 404 });
   }
 
-  return NextResponse.json(skill);
+  return NextResponse.json(data);
 }
 
-// PATCH /api/skills/:id - 更新
 export async function PATCH(request: NextRequest, { params }: { params: Params }) {
   try {
+    const user = await getUserFromRequest(request);
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
     const { id } = await params;
     const body = await request.json();
     const validatedData = updateSkillSchema.parse(body) as Partial<{
@@ -27,27 +52,43 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
       category: string;
       experience_months: number;
     }>;
-    const updatedSkill = await updateSkill(id, validatedData);
 
-    if (!updatedSkill) {
+    const { data, error } = await supabase
+      .from("skills")
+      .update({ ...validatedData, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .select()
+      .single();
+
+    if (error || !data) {
       return NextResponse.json({ error: "Skill not found" }, { status: 404 });
     }
 
-    return NextResponse.json(updatedSkill);
+    return NextResponse.json(data);
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
+
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }
 
-// DELETE /api/skills/:id - 削除
 export async function DELETE(request: NextRequest, { params }: { params: Params }) {
-  const { id } = await params;
-  const success = await deleteSkill(id);
+  const user = await getUserFromRequest(request);
+  if (!user) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
 
-  if (!success) {
+  const { id } = await params;
+  const { error, count } = await supabase
+    .from("skills")
+    .delete({ count: "exact" })
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  if (error || !count) {
     return NextResponse.json({ error: "Skill not found" }, { status: 404 });
   }
 

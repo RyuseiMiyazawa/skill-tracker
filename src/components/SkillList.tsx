@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useAuth } from "./AuthProvider";
+import { deleteGuestSkill } from "@/lib/guestSkills";
+import { authenticatedFetch } from "@/lib/api";
 
 type Props = {
   skills: Skill[];
@@ -13,6 +16,7 @@ type Props = {
 
 export default function SkillList({ skills, onSkillDeleted }: Props) {
   const router = useRouter();
+  const { isGuest } = useAuth();
   const [deleting, setDeleting] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
@@ -21,7 +25,21 @@ export default function SkillList({ skills, onSkillDeleted }: Props) {
 
     setDeleting(id);
     try {
-      const res = await fetch(`/api/skills/${id}`, {
+      if (isGuest) {
+        const deleted = deleteGuestSkill(id);
+        if (!deleted) {
+          alert("Failed to delete skill");
+          return;
+        }
+
+        if (onSkillDeleted) {
+          onSkillDeleted();
+        }
+        router.refresh();
+        return;
+      }
+
+      const res = await authenticatedFetch(`/api/skills/${id}`, {
         method: "DELETE",
       });
 

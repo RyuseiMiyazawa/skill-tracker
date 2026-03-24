@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { signOut } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
+import { clearGuestSkills } from "@/lib/guestSkills";
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const { user, isGuest, exitGuestMode } = useAuth();
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -16,6 +17,12 @@ export default function SettingsPage() {
   const handleLogout = async () => {
     await signOut();
     router.push("/login");
+  };
+
+  const handleClearGuestData = () => {
+    clearGuestSkills();
+    router.push("/");
+    router.refresh();
   };
 
   const handleDeleteAccount = async () => {
@@ -54,6 +61,39 @@ export default function SettingsPage() {
       setIsDeleting(false);
     }
   };
+
+  if (isGuest) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Settings</h1>
+
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Guest Session</h2>
+          <p className="text-gray-700">
+            You are using guest mode. Skills are stored only in this browser and are not synced to an account.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Session</h2>
+          <div className="flex gap-3">
+            <button
+              onClick={exitGuestMode}
+              className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+            >
+              Exit Guest Mode
+            </button>
+            <button
+              onClick={handleClearGuestData}
+              className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition"
+            >
+              Clear Guest Data
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return null;

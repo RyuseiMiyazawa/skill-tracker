@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn, signUp } from "@/lib/auth";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function LoginPage() {
+  const { startGuestMode } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -105,6 +107,19 @@ export default function LoginPage() {
           >
             {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign up"}
           </button>
+        </div>
+
+        <div className="mt-6 border-t border-gray-200 pt-6">
+          <button
+            type="button"
+            onClick={startGuestMode}
+            className="w-full rounded-lg border border-gray-300 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
+          >
+            Continue as Guest
+          </button>
+          <p className="mt-2 text-center text-xs text-gray-500">
+            Guest data is stored only in this browser.
+          </p>
         </div>
       </div>
     </div>
